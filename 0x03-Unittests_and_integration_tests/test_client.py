@@ -26,7 +26,7 @@ class TestGithubOrgClient(unittest.TestCase):
         fn.assert_called_once_with(url)
 
     def test_public_repos_url(self) -> None:
-        """Tests the `_public_repos_url` property."""
+        """Tests the _public_repos_url property."""
         with patch(
                 "client.GithubOrgClient.org",
                 new_callable=PropertyMock,
