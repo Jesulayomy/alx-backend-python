@@ -2,7 +2,7 @@
 """ Unittests for the utils.access_nested_map method """
 
 from parameterized import parameterized
-from typing import List, Dict, Any, Mapping, Sequence
+from typing import Dict, Any, Mapping, Sequence
 from unittest.mock import patch, Mock
 from utils import access_nested_map, get_json, memoize
 import unittest
@@ -16,18 +16,20 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
-    def test_access_nested_map(self, nest: Mapping, path: Sequence, res: Any):
+    def test_access_nested_map(
+            self, nested_map: Mapping, path: Sequence, res: Any) -> None:
         """ tests the mappig using assert statements """
-        self.assertEqual(access_nested_map(nest, path), res)
+        self.assertEqual(access_nested_map(nested_map, path), res)
 
     @parameterized.expand([
         ({}, ("a",)),
         ({"a": 1}, ("a", "b"))
     ])
-    def test_access_nested_map_exception(self, nest: Mapping, path: Sequence):
+    def test_access_nested_map_exception(
+            self, nested_map: Mapping, path: Sequence) -> None:
         """ Tests that the parameters raise a KeyError exception """
         with self.assertRaises(KeyError):
-            access_nested_map((nest, path))
+            access_nested_map((nested_map, path))
 
 
 class TestGetJson(unittest.TestCase):
