@@ -16,6 +16,7 @@ from typing import (
 from unittest.mock import (
     patch,
     MagicMock,
+    Mock,
     PropertyMock,
 )
 
