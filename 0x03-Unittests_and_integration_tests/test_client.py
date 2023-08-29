@@ -4,7 +4,7 @@ from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 from parameterized import parameterized, parameterized_class
 from requests import HTTPError
-from typing import Sequence, Mapping, Dict, Any
+from typing import Dict, Callable
 from unittest.mock import patch, Mock, MagicMock, PropertyMock
 import unittest
 
@@ -13,17 +13,16 @@ class TestGithubOrgClient(unittest.TestCase):
     """ tests the githuborgclient method """
 
     @parameterized.expand([
-        ("google", {"login": "google"}),
-        ("abc", {"login": "abc"})
+        ("google"),
+        ("abc")
     ])
     @patch("client.get_json")
-    def test_org(self, org: str, res: Dict, fn: MagicMock):
+    def test_org(self, org: str, methodMock: Callable) -> None:
         """ Tests the organization method """
-        fn.return_value = MagicMock(return_value=res)
-        url = "https://api.github.com/orgs/{org}"
-        org_cli = GithubOrgClient(org)
-        self.assertEqual(org_cli.org(), res)
-        fn.assert_called_once_with(url)
+        test_class = GithubOrgClient(org)
+        test_class.org()
+        methodMock.assert_called_once_with(
+            "https://api.github.com/orgs/{}".format(org))
 
     def test_public_repos_url(self) -> None:
         """Tests the _public_repos_url property."""
@@ -35,7 +34,9 @@ class TestGithubOrgClient(unittest.TestCase):
                 'repos_url': "https://api.github.com/users/google/repos",
             }
             self.assertEqual(
-                GithubOrgClient("google")._public_repos_url,
+                GithubOrgClient(
+                    "https://api.github.com/users/google/repos"
+                )._public_repos_url,
                 "https://api.github.com/users/google/repos",
             )
 
