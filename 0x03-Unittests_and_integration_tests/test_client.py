@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """ Unittests for the client module """
+
+import unittest
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 from parameterized import (
@@ -16,7 +18,6 @@ from unittest.mock import (
     MagicMock,
     PropertyMock,
 )
-import unittest
 
 
 class TestGithubOrgClient(unittest.TestCase):
