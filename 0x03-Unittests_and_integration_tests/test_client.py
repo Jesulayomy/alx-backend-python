@@ -2,10 +2,20 @@
 """ Unittests for the client module """
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
-from parameterized import parameterized, parameterized_class
+from parameterized import (
+    parameterized,
+    parameterized_class,
+)
 from requests import HTTPError
-from typing import Dict, Callable
-from unittest.mock import patch, Mock, MagicMock, PropertyMock
+from typing import (
+    Dict,
+    Callable,
+)
+from unittest.mock import (
+    patch,
+    MagicMock,
+    PropertyMock,
+)
 import unittest
 
 

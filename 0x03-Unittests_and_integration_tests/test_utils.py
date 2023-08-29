@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 """ Unittests for the utils.access_nested_map method """
 
-from parameterized import parameterized
-from typing import Dict, Any, Mapping, Sequence
-from unittest.mock import patch, Mock
-from utils import access_nested_map, get_json, memoize
 import unittest
+from parameterized import parameterized
+from typing import (
+    Any,
+    Dict,
+    Mapping,
+    Sequence,
+)
+from unittest.mock import (
+    Mock,
+    patch,
+)
+from utils import (
+    access_nested_map,
+    get_json,
+    memoize,
+)
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -16,20 +28,21 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
-    def test_access_nested_map(
-            self, nested_map: Mapping, path: Sequence, res: Any) -> None:
-        """ tests the mappig using assert statements """
-        self.assertEqual(access_nested_map(nested_map, path), res)
+    def test_access_nested_map(self, nested_map: Mapping,
+                               path: Sequence, expected: Any) -> None:
+        """ Test that the method returns the expected results """
+        self.assertEqual(access_nested_map(nested_map, path), expected)
 
     @parameterized.expand([
-        ({}, ("a",)),
-        ({"a": 1}, ("a", "b"))
+        ({}, ("a",), KeyError),
+        ({"a": 1}, ("a", "b"), KeyError)
     ])
-    def test_access_nested_map_exception(
-            self, nested_map: Mapping, path: Sequence) -> None:
-        """ Tests that the parameters raise a KeyError exception """
-        with self.assertRaises(KeyError):
-            access_nested_map((nested_map, path))
+    def test_access_nested_map_exception(self, nested_map: Mapping,
+                                         path: Sequence,
+                                         expected: Any) -> None:
+        """ Test that a KeyError is raised for error cases """
+        with self.assertRaises(expected):
+            access_nested_map(nested_map, path)
 
 
 class TestGetJson(unittest.TestCase):
@@ -52,21 +65,22 @@ class TestGetJson(unittest.TestCase):
 class TestMemoize(unittest.TestCase):
     """ Tests the memoize function using unittests """
 
-    def test_memoize(self):
+    def test_memoize(self) -> None:
         """ Tests tthe memoize(d) methods and wrapper """
         class TestClass:
             """ A simple  testing class """
-            def a_method(self):
+            def a_method(self) -> int:
                 """ A simple tester method """
                 return 42
 
             @memoize
-            def a_property(self):
+            def a_property(self) -> int:
                 """ A simple property method """
                 return self.a_method()
 
-        with patch(TestClass, "a_method", ret=lambda: 42) as amd:
-            my_object = TestClass()
-            self.assertEqual(my_object.a_property(), 42)
-            self.assertEqual(my_object.a_property(), 42)
-            amd.assert_called_once()
+        with patch.object(TestClass, "a_method") as amd:
+            myClass = TestClass()
+            myClass.a_property
+            myClass.a_property
+            amd.assert_called_once
+            self.assertEqual(myClass.a_property, amd.return_value)
